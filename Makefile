@@ -1,33 +1,17 @@
-CXX = g++
-CXXFLAGS = -g -Wall -Wextra
+C++ = g++
 
+RM = rm -f
 
-BIN 	 = main
-OBJ		 = main.o
-HEADERS	 = calculator.h
-SLIB	 = calculator.a
-SLIB_OBJ = calculator.o
+C++FLAGS = -Wall -c -I include/
 
+main: main.o calculator.o
+	$(C++) $? -o $@
 
+calculator.o: src/calculator.cpp include/calculator.h
+	$(C++) $(C++FLAGS) src/calculator.cpp -o $@
 
-all: $(BIN)
-
-
-$(BIN): $(BIN).o $(SLIB)
-	$(CXX) $(CXXFLAGS) $(BIN).o -o $(BIN) -L. -l:calculator.a
-
-
-$(OBJ): main.cpp
-	$(CXX) $(CXXFLAGS) -c $<
-
-
-calculator.a: $(SLIB_OBJ)
-	$(AR) $(ARFLAGS) $@ $^
-
-
-calculator.o: calculator.cpp $(HEADERS)
-	$(CXX) $(CXXFLAGS) -c $<
-
+main.o: src/main.cpp include/calculator.h
+	$(C++) $(C++FLAGS) src/main.cpp -o $@
 
 clean:
-	rm -rf $(BIN) $(OBJ) $(SLIB) $(SLIB_OBJ)
+	$(RM) *.o main
